@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clasificador de Reciclaje</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+    
+    .draggable {
+      cursor: grab;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .draggable:active {
+      cursor: grabbing;
+    }
+    
+    .draggable.dragging {
+      opacity: 0.5;
+      transform: scale(1.05);
+    }
+    
+    .bin {
+      transition: all 0.3s;
+    }
+    
+    .bin.drag-over {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .item-in-bin {
+      animation: dropIn 0.3s ease-out;
+    }
+    
+    @keyframes dropIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+    
+    .celebration {
+      animation: celebrate 0.6s ease-out;
+    }
+    
+    @keyframes celebrate {
+      0%, 100% {
+        transform: scale(1);
+      }
+      25% {
+        transform: scale(1.1) rotate(-5deg);
+      }
+      75% {
+        transform: scale(1.1) rotate(5deg);
+      }
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full h-full flex flex-col" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100%; overflow: auto 23px;">
+   <header class="text-center py-8 px-4">
+    <h1 id="gameTitle" class="text-5xl font-bold text-white mb-3">¡Clasifica los Residuos!</h1>
+    <p id="gameInstructions" class="text-xl text-white opacity-90">Arrastra cada objeto al contenedor correcto</p>
+    <div id="scoreDisplay" class="mt-4 text-2xl font-bold text-white">
+     Puntuación: <span id="score">0</span> / <span id="total">8</span>
+    </div>
+   </header>
+   <main class="flex-1 px-4 pb-8"><!-- Área de objetos para clasificar -->
+    <div class="mb-8">
+     <div id="itemsContainer" class="grid grid-cols-4 gap-4 max-w-4xl mx-auto"><!-- Los items se generarán dinámicamente -->
+     </div>
+    </div><!-- Contenedores de reciclaje -->
+    <div class="grid grid-cols-4 gap-4 max-w-5xl mx-auto">
+     <div class="bin rounded-2xl p-6 text-center" data-bin-type="organic" style="background-color: #8B4513; min-height: 200px;">
+      <div class="text-6xl mb-3">
+       🍂
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Orgánico</h3>
+      <div class="bin-items grid grid-cols-2 gap-2 mt-4"></div>
+     </div>
+     <div class="bin rounded-2xl p-6 text-center" data-bin-type="paper" style="background-color: #4169E1; min-height: 200px;">
+      <div class="text-6xl mb-3">
+       📄
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Papel</h3>
+      <div class="bin-items grid grid-cols-2 gap-2 mt-4"></div>
+     </div>
+     <div class="bin rounded-2xl p-6 text-center" data-bin-type="plastic" style="background-color: #FFD700; min-height: 200px;">
+      <div class="text-6xl mb-3">
+       ♻️
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Plástico</h3>
+      <div class="bin-items grid grid-cols-2 gap-2 mt-4"></div>
+     </div>
+     <div class="bin rounded-2xl p-6 text-center" data-bin-type="glass" style="background-color: #228B22; min-height: 200px;">
+      <div class="text-6xl mb-3">
+       🍾
+      </div>
+      <h3 class="text-xl font-bold text-white mb-2">Vidrio</h3>
+      <div class="bin-items grid grid-cols-2 gap-2 mt-4"></div>
+     </div>
+    </div><!-- Mensaje de éxito -->
+    <div id="successMessage" class="hidden mt-8 text-center">
+     <div class="bg-white rounded-2xl p-8 max-w-md mx-auto shadow-2xl celebration">
+      <div class="text-7xl mb-4">
+       🎉
+      </div>
+      <h2 id="successText" class="text-3xl font-bold mb-2" style="color: #667eea;">¡Excelente trabajo!</h2>
+      <p class="text-xl mb-6" style="color: #764ba2;">Has clasificado todos los residuos correctamente</p><button id="resetButton" class="px-8 py-4 rounded-xl text-white text-xl font-bold transition-all hover:scale-105" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"> Jugar de Nuevo </button>
+     </div>
+    </div>
+   </main>
+  </div>
+  <script>
+    const defaultConfig = {
+      game_title: "¡Clasifica los Residuos!",
+      game_instructions: "Arrastra cada objeto al contenedor correcto",
+      success_message: "¡Excelente trabajo!",
+      background_color: "#667eea",
+      bin_organic_color: "#8B4513",
+      bin_paper_color: "#4169E1",
+      bin_plastic_color: "#FFD700",
+      bin_glass_color: "#228B22",
+      text_color: "#FFFFFF",
+      font_family: "Inter",
+      font_size: 16
+    };
+
+    const items = [
+      { id: 1, emoji: "🍌", name: "Banana", type: "organic" },
+      { id: 2, emoji: "📰", name: "Periódico", type: "paper" },
+      { id: 3, emoji: "🥤", name: "Botella de plástico", type: "plastic" },
+      { id: 4, emoji: "🍷", name: "Botella de vidrio", type: "glass" },
+      { id: 5, emoji: "🥕", name: "Zanahoria", type: "organic" },
+      { id: 6, emoji: "📦", name: "Caja de cartón", type: "paper" },
+      { id: 7, emoji: "🥛", name: "Envase de yogur", type: "plastic" },
+      { id: 8, emoji: "🫙", name: "Frasco de vidrio", type: "glass" }
+    ];
+
+    let score = 0;
+    let draggedElement = null;
+
+    function initGame() {
+      const itemsContainer = document.getElementById('itemsContainer');
+      itemsContainer.innerHTML = '';
+      
+      const shuffledItems = [...items].sort(() => Math.random() - 0.5);
+      
+      shuffledItems.forEach(item => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'draggable bg-white rounded-xl p-4 text-center shadow-lg';
+        itemDiv.draggable = true;
+        itemDiv.dataset.itemType = item.type;
+        itemDiv.dataset.itemId = item.id;
+        itemDiv.innerHTML = `
+          <div class="text-5xl mb-2">${item.emoji}</div>
+          <div class="text-sm font-semibold" style="color: #667eea;">${item.name}</div>
+        `;
+        
+        itemDiv.addEventListener('dragstart', handleDragStart);
+        itemDiv.addEventListener('dragend', handleDragEnd);
+        
+        itemsContainer.appendChild(itemDiv);
+      });
+
+      document.querySelectorAll('.bin').forEach(bin => {
+        bin.addEventListener('dragover', handleDragOver);
+        bin.addEventListener('drop', handleDrop);
+        bin.addEventListener('dragleave', handleDragLeave);
+      });
+
+      score = 0;
+      updateScore();
+      document.getElementById('successMessage').classList.add('hidden');
+    }
+
+    function handleDragStart(e) {
+      draggedElement = e.target;
+      e.target.classList.add('dragging');
+    }
+
+    function handleDragEnd(e) {
+      e.target.classList.remove('dragging');
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('drag-over');
+    }
+
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('drag-over');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      const bin = e.currentTarget;
+      bin.classList.remove('drag-over');
+      
+      if (!draggedElement) return;
+      
+      const itemType = draggedElement.dataset.itemType;
+      const binType = bin.dataset.binType;
+      
+      if (itemType === binType) {
+        const binItems = bin.querySelector('.bin-items');
+        const smallItem = document.createElement('div');
+        smallItem.className = 'item-in-bin text-3xl';
+        smallItem.textContent = draggedElement.querySelector('.text-5xl').textContent;
+        binItems.appendChild(smallItem);
+        
+        draggedElement.remove();
+        score++;
+        updateScore();
+        
+        if (score === items.length) {
+          setTimeout(() => {
+            document.getElementById('successMessage').classList.remove('hidden');
+          }, 500);
+        }
+      } else {
+        draggedElement.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          draggedElement.style.animation = '';
+        }, 500);
+      }
+      
+      draggedElement = null;
+    }
+
+    function updateScore() {
+      document.getElementById('score').textContent = score;
+    }
+
+    document.getElementById('resetButton').addEventListener('click', () => {
+      document.querySelectorAll('.bin-items').forEach(container => {
+        container.innerHTML = '';
+      });
+      initGame();
+    });
+
+    async function onConfigChange(config) {
+      const baseFontSize = config.font_size || defaultConfig.font_size;
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      
+      document.getElementById('gameTitle').textContent = config.game_title || defaultConfig.game_title;
+      document.getElementById('gameTitle').style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.getElementById('gameTitle').style.fontSize = `${baseFontSize * 3.125}px`;
+      
+      document.getElementById('gameInstructions').textContent = config.game_instructions || defaultConfig.game_instructions;
+      document.getElementById('gameInstructions').style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.getElementById('gameInstructions').style.fontSize = `${baseFontSize * 1.25}px`;
+      
+      document.getElementById('successText').textContent = config.success_message || defaultConfig.success_message;
+      document.getElementById('successText').style.fontFamily = `${customFont}, ${baseFontStack}`;
+      document.getElementById('successText').style.fontSize = `${baseFontSize * 1.875}px`;
+      
+      const app = document.getElementById('app');
+      const backgroundColor = config.background_color || defaultConfig.background_color;
+      app.style.background = `linear-gradient(135deg, ${backgroundColor} 0%,:#764ba2 100%)`;
+      
+      const bins = document.querySelectorAll('.bin');
+      bins[0].style.backgroundColor = config.bin_organic_color || defaultConfig.bin_organic_color;
+      bins[1].style.backgroundColor = config.bin_paper_color || defaultConfig.bin_paper_color;
+      bins[2].style.backgroundColor = config.bin_plastic_color || defaultConfig.bin_plastic_color;
+      bins[3].style.backgroundColor = config.bin_glass_color || defaultConfig.bin_glass_color;
+      
+      document.querySelectorAll('.bin h3').forEach(heading => {
+        heading.style.color = config.text_color || defaultConfig.text_color;
+        heading.style.fontFamily = `${customFont}, ${baseFontStack}`;
+        heading.style.fontSize = `${baseFontSize * 1.25}px`;
+      });
+      
+      document.querySelectorAll('header p, #scoreDisplay').forEach(el => {
+        el.style.color = config.text_color || defaultConfig.text_color;
+        el.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      });
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities: (config) => ({
+          recolorables: [
+            {
+              get: () => config.background_color || defaultConfig.background_color,
+              set: (value) => {
+                config.background_color = value;
+                window.elementSdk.setConfig({ background_color: value });
+              }
+            },
+            {
+              get: () => config.bin_organic_color || defaultConfig.bin_organic_color,
+              set: (value) => {
+                config.bin_organic_color = value;
+                window.elementSdk.setConfig({ bin_organic_color: value });
+              }
+            },
+            {
+              get: () => config.bin_paper_color || defaultConfig.bin_paper_color,
+              set: (value) => {
+                config.bin_paper_color = value;
+                window.elementSdk.setConfig({ bin_paper_color: value });
+              }
+            },
+            {
+              get: () => config.bin_plastic_color || defaultConfig.bin_plastic_color,
+              set: (value) => {
+                config.bin_plastic_color = value;
+                window.elementSdk.setConfig({ bin_plastic_color: value });
+              }
+            },
+            {
+              get: () => config.bin_glass_color || defaultConfig.bin_glass_color,
+              set: (value) => {
+                config.bin_glass_color = value;
+                window.elementSdk.setConfig({ bin_glass_color: value });
+              }
+            }
+          ],
+          borderables: [],
+          fontEditable: {
+            get: () => config.font_family || defaultConfig.font_family,
+            set: (value) => {
+              config.font_family = value;
+              window.elementSdk.setConfig({ font_family: value });
+            }
+          },
+          fontSizeable: {
+            get: () => config.font_size || defaultConfig.font_size,
+            set: (value) => {
+              config.font_size = value;
+              window.elementSdk.setConfig({ font_size: value });
+            }
+          }
+        }),
+        mapToEditPanelValues: (config) => new Map([
+          ["game_title", config.game_title || defaultConfig.game_title],
+          ["game_instructions", config.game_instructions || defaultConfig.game_instructions],
+          ["success_message", config.success_message || defaultConfig.success_message]
+        ])
+      });
+    }
+
+    initGame();
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9ae021f4009cc1ca',t:'MTc2NTc0MDgwMy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<a href="INDICE.html" class="btn-regresar">Regresar</a>
+ </html> 

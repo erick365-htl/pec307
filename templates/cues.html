@@ -1,0 +1,313 @@
+ <!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cuestionario: Importancia del Reciclaje en la Escuela</title>
+  <style>
+    :root{
+      --bg:#f6fbf8;
+      --card:#ffffff;
+      --accent:#2f9e44;
+      --muted:#6b7280;
+      --accent-2:#6b46c1;
+    }
+    body{
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, #eafaf1 0%, var(--bg) 100%);
+      margin: 0;
+      padding: 24px;
+      color: #111827;
+      -webkit-font-smoothing:antialiased;
+    }
+    .container{
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    header{
+      display:flex;
+      align-items:center;
+      gap:16px;
+      margin-bottom:16px;
+    }
+    header h1{
+      margin:0;
+      font-size:1.5rem;
+    }
+    .card{
+      background:var(--card);
+      border-radius:12px;
+      padding:20px;
+      box-shadow: 0 6px 20px rgba(99,102,241,0.06);
+      margin-bottom:16px;
+    }
+    .intro{
+      color:var(--muted);
+      margin-bottom:12px;
+    }
+    form .pregunta{
+      margin-bottom:18px;
+      padding:12px;
+      border-left:6px solid rgba(107,70,193,0.08);
+      border-radius:8px;
+    }
+    .pregunta h3{
+      margin:0 0 8px 0;
+      font-size:1rem;
+    }
+    .opts label{
+      display:block;
+      margin-bottom:6px;
+      cursor:pointer;
+      padding:6px 8px;
+      border-radius:6px;
+      transition:background .12s;
+    }
+    .opts input[type="radio"]{ margin-right:8px; }
+    .opts label:hover{ background: rgba(99,102,241,0.04); }
+    .botones{
+      display:flex;
+      gap:12px;
+      margin-top:12px;
+      align-items:center;
+    }
+    button{
+      border:0;
+      padding:10px 14px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .btn-primary{ background:var(--accent-2); color:white; }
+    .btn-reset{ background:#fff; border:1px solid #e6e6e6; color:#111827; }
+    .resultado{
+      margin-top:16px;
+      padding:14px;
+      border-radius:8px;
+      display:none;
+    }
+    .resultado.good{ background: linear-gradient(90deg, rgba(47,158,68,0.12), rgba(107,70,193,0.04)); border-left:6px solid var(--accent); }
+    .resultado.warn{ background: #fff9e6; border-left:6px solid #f59e0b; }
+    .feedback{
+      margin-top:8px;
+      border-radius:8px;
+      padding:10px;
+      background:#fbfbfb;
+      border:1px solid #f1f5f9;
+    }
+    small{ color:var(--muted); }
+    @media (max-width:600px){
+      body{ padding:12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div style="width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent-2),var(--accent));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:22px">REC</div>
+      <div>
+        <h1>Cuestionario: Importancia del Reciclaje en la Escuela</h1>
+        <div class="intro">10 preguntas — responde y al final recibirás tu puntaje y explicación breve por cada pregunta.</div>
+      </div>
+    </header>
+
+    <form id="quizForm" class="card" onsubmit="return false;">
+      <!-- Pregunta 1 -->
+      <div class="pregunta" data-q="1">
+        <h3>1. ¿Por qué es importante reciclar en la escuela?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q1" value="a"> Porque ocupa espacio en los salones</label>
+          <label><input type="radio" name="q1" value="b"> Para reducir residuos y proteger el medio ambiente</label>
+          <label><input type="radio" name="q1" value="c"> Porque aumenta el ruido</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 2 -->
+      <div class="pregunta" data-q="2">
+        <h3>2. ¿Cuál de estos materiales se debe depositar en el contenedor de papel/cartón?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q2" value="a"> Botellas de plástico</label>
+          <label><input type="radio" name="q2" value="b"> Cuadernos y hojas usadas</label>
+          <label><input type="radio" name="q2" value="c"> Restos de comida</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 3 -->
+      <div class="pregunta" data-q="3">
+        <h3>3. ¿Qué acción escolar ayuda directamente al reciclaje?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q3" value="a"> Separar residuos en origen</label>
+          <label><input type="radio" name="q3" value="b"> Tirar todo en una misma papelera</label>
+          <label><input type="radio" name="q3" value="c"> Usar más productos desechables</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 4 -->
+      <div class="pregunta" data-q="4">
+        <h3>4. ¿Cuál es un beneficio educativo de realizar programas de reciclaje en la escuela?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q4" value="a"> Enseñar responsabilidad ambiental a estudiantes</label>
+          <label><input type="radio" name="q4" value="b"> Aumentar el trabajo del personal de limpieza</label>
+          <label><input type="radio" name="q4" value="c"> Provocar conflictos entre grupos</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 5 -->
+      <div class="pregunta" data-q="5">
+        <h3>5. ¿Qué elemento pertenece al reciclaje de plástico?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q5" value="a"> Envases PET (botellas)</label>
+          <label><input type="radio" name="q5" value="b"> Papel aluminio</label>
+          <label><input type="radio" name="q5" value="c"> Hojas de cuaderno</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 6 -->
+      <div class="pregunta" data-q="6">
+        <h3>6. ¿Qué es la regla de las 3R que suelen promover en las escuelas?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q6" value="a"> Reducir, Reutilizar, Reciclar</label>
+          <label><input type="radio" name="q6" value="b"> Reparar, Raspar, Romper</label>
+          <label><input type="radio" name="q6" value="c"> Revisar, Repetir, Rechazar</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 7 -->
+      <div class="pregunta" data-q="7">
+        <h3>7. Para que el reciclaje funcione bien en la escuela, es importante:</h3>
+        <div class="opts">
+          <label><input type="radio" name="q7" value="a"> Colocar contenedores claramente etiquetados</label>
+          <label><input type="radio" name="q7" value="b"> Mezclar todos los residuos</label>
+          <label><input type="radio" name="q7" value="c"> No informar a nadie sobre las reglas</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 8 -->
+      <div class="pregunta" data-q="8">
+        <h3>8. ¿Qué ocurre si la escuela reduce el uso de papel y reutiliza material?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q8" value="a"> Disminuye el consumo de recursos y genera menos basura</label>
+          <label><input type="radio" name="q8" value="b"> Aumenta el desperdicio</label>
+          <label><input type="radio" name="q8" value="c"> No tiene ningún efecto</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 9 -->
+      <div class="pregunta" data-q="9">
+        <h3>9. ¿Cuál es una actividad práctica que pueden hacer los estudiantes para fomentar el reciclaje?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q9" value="a"> Crear carteles informativos y campañas</label>
+          <label><input type="radio" name="q9" value="b"> Ignorar las fechas de recolección</label>
+          <label><input type="radio" name="q9" value="c"> Tirar basura en áreas verdes</label>
+        </div>
+      </div>
+
+      <!-- Pregunta 10 -->
+      <div class="pregunta" data-q="10">
+        <h3>10. ¿Qué actitud deben fomentar los estudiantes respecto al reciclaje?</h3>
+        <div class="opts">
+          <label><input type="radio" name="q10" value="a"> Indiferencia</label>
+          <label><input type="radio" name="q10" value="b"> Responsabilidad y cooperación</label>
+          <label><input type="radio" name="q10" value="c"> Competencia por reciclar menos</label>
+        </div>
+      </div>
+
+      <div class="botones">
+        <button class="btn-primary" id="calcular">Enviar y ver resultados</button>
+        <button class="btn-reset" id="reiniciar" type="button">Reiniciar</button>
+        <small id="aviso" style="margin-left:12px;">Responde todas las preguntas antes de enviar.</small>
+      </div>
+
+      <div id="resultado" class="resultado">
+        <strong id="scoreText"></strong>
+        <div id="scoreMessage" style="margin-top:8px;"></div>
+        <div id="detalles" class="feedback" style="display:none;"></div>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const respuestas = {
+      q1: 'b',
+      q2: 'b',
+      q3: 'a',
+      q4: 'a',
+      q5: 'a',
+      q6: 'a',
+      q7: 'a',
+      q8: 'a',
+      q9: 'a',
+      q10:'b'
+    };
+
+    const explicaciones = {
+      q1: 'Reciclar reduce residuos y ayuda a proteger el medio ambiente escolar y local.',
+      q2: 'Cuadernos, hojas y cartón van al contenedor de papel/cartón para ser reciclados.',
+      q3: 'Separar residuos en su origen facilita su reciclaje y evita contaminación.',
+      q4: 'Los programas de reciclaje enseñan responsabilidad y hábitos sostenibles.',
+      q5: 'Las botellas PET son ejemplos clásicos de plástico reciclable.',
+      q6: 'Reducir, Reutilizar y Reciclar ayudan a disminuir impacto ambiental.',
+      q7: 'Contenedores etiquetados facilitan que todos separen correctamente los residuos.',
+      q8: 'Reducir el uso de papel y reutilizar materiales disminuye la extracción de recursos y basura.',
+      q9: 'Campañas y carteles sensibilizan y motivan a la comunidad escolar.',
+      q10:'Fomentar responsabilidad y cooperación implica hábitos sostenibles compartidos.'
+    };
+
+    document.getElementById('calcular').addEventListener('click', () => {
+      const form = document.getElementById('quizForm');
+      const datos = new FormData(form);
+      // Validar que haya respuesta para cada pregunta
+      for (let i=1;i<=10;i++){
+        if (!datos.has('q'+i)){
+          document.getElementById('aviso').textContent = 'Por favor responde todas las preguntas (faltan respuestas).';
+          return;
+        }
+      }
+      document.getElementById('aviso').textContent = '';
+      let puntaje = 0;
+      let detalleHTML = '<ol style="padding-left:18px;margin:0;">';
+      for (let i=1;i<=10;i++){
+        const key = 'q'+i;
+        const resp = datos.get(key);
+        const correcto = respuestas[key];
+        const ok = resp === correcto;
+        if (ok) puntaje++;
+        detalleHTML += `<li><strong>Pregunta ${i}:</strong> ${ok ? 'Correcto' : 'Incorrecto'} — ${explicaciones[key]}</li>`;
+      }
+      detalleHTML += '</ol>';
+
+      const porcentaje = Math.round((puntaje / 10) * 100);
+      const resultadoDiv = document.getElementById('resultado');
+      resultadoDiv.style.display = 'block';
+      const scoreText = document.getElementById('scoreText');
+      scoreText.textContent = `Obtuviste ${puntaje} de 10 (${porcentaje}%).`;
+
+      const scoreMessage = document.getElementById('scoreMessage');
+      if (puntaje >= 8){
+        resultadoDiv.className = 'resultado good';
+        scoreMessage.innerHTML = '¡Excelente! Demuestras buenos conocimientos sobre reciclaje y su importancia en la escuela.';
+      } else if (puntaje >= 5){
+        resultadoDiv.className = 'resultado warn';
+        scoreMessage.innerHTML = 'Buen intento. Hay conceptos que podrías reforzar sobre prácticas y beneficios del reciclaje.';
+      } else {
+        resultadoDiv.className = 'resultado warn';
+        scoreMessage.innerHTML = 'Necesitas estudiar más. El reciclaje en la escuela es clave para reducir residuos y enseñar responsabilidad.';
+      }
+
+      const detalles = document.getElementById('detalles');
+      detalles.style.display = 'block';
+      detalles.innerHTML = '<strong>Retroalimentación por pregunta:</strong>' + detalleHTML;
+      // desplazar hacia el resultado (suave)
+      resultadoDiv.scrollIntoView({behavior:'smooth', block:'center'});
+    });
+
+    document.getElementById('reiniciar').addEventListener('click', () => {
+      document.getElementById('quizForm').reset();
+      document.getElementById('resultado').style.display = 'none';
+      document.getElementById('aviso').textContent = 'Responde todas las preguntas antes de enviar.';
+      document.getElementById('aviso').style.color = '';
+    });
+  </script>
+  <a href="INDICE.html" class="btn-regresar">Regresar</a>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Contaminación — Información educativa</title>
+  <style>
+    :root{--bg:#f5f7fb;--card:#fff;--accent:#2b8cff;--text:#1f2937;--muted:#6b7280}
+    *{box-sizing:border-box}
+    body{font-family:Inter, system-ui, -apple-system, Arial, sans-serif;margin:0;background:var(--bg);color:var(--text);line-height:1.5}
+    .wrap{max-width:980px;margin:32px auto;padding:20px}
+    header{display:flex;gap:16px;align-items:center}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    h1{font-size:1.6rem;margin:0}
+    p.lead{color:var(--muted);margin-top:6px}
+
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:20px;margin-top:20px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 18px rgba(20,20,40,0.05)}
+    .section-title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .section-title h2{font-size:1.05rem;margin:0}
+    ul{padding-left:18px}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#eef6ff;color:var(--accent);font-weight:600;font-size:0.85rem}
+
+    .facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .fact{background:#f8fafc;padding:10px;border-radius:8px;text-align:center}
+    .fact strong{display:block;font-size:1.1rem}
+
+    .tips ul{list-style:disc}
+
+    footer{margin-top:18px;font-size:0.9rem;color:var(--muted);text-align:center}
+
+    /* responsive */
+    @media (max-width:900px){
+      .grid{grid-template-columns:1fr}
+    }
+
+    /* dark mode support */
+    .dark{--bg:#0b1220;--card:#081224;--accent:#7dd3fc;--text:#e6eef6;--muted:#94a3b8}
+
+    /* small utilities */
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;border:none;background:var(--accent);color:white;font-weight:600;cursor:pointer}
+    .muted{color:var(--muted)}
+    .small{font-size:0.9rem}
+    .quiz input[type="radio"]{margin-right:8px}
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <header>
+      <div class="logo">Contaminación</div>
+      <div>
+        <h1>Contaminación — ¿qué es y cómo ayudar?</h1>
+        <p class="lead">Una página educativa con causas, efectos y soluciones sencillas que tú puedes aplicar.</p>
+      </div>
+      <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <button class="btn" id="toggleTheme">Modo oscuro</button>
+        <button class="btn" id="download">Descargar HTML</button>
+      </div>
+    </header>
+
+    <div class="grid">
+      <main>
+        <section class="card">
+          <div class="section-title">
+            <h2>¿Qué es la contaminación?</h2>
+            <span class="pill">Básico</span>
+          </div>
+          <p>La <strong>contaminación</strong> es la presencia de sustancias o energía (como ruido o calor) en el ambiente que causan efectos negativos en la salud humana, los ecosistemas y la actividad económica. Puede ser de varios tipos: del aire, del agua, del suelo, lumínica, acústica, entre otras.</p>
+        </section>
+
+        <section class="card" style="margin-top:14px">
+          <div class="section-title">
+            <h2>Causas principales</h2>
+            <span class="muted small">Ejemplos comunes</span>
+          </div>
+          <ul>
+            <li><strong>Industrial:</strong> emisiones de fábricas, vertidos químicos.</li>
+            <li><strong>Transporte:</strong> gases de los autos, aviones y camiones.</li>
+            <li><strong>Agricultura:</strong> uso de pesticidas y fertilizantes que contaminan suelos y aguas.</li>
+            <li><strong>Residuos:</strong> basura mal gestionada y plásticos en ríos y mares.</li>
+            <li><strong>Actividades domésticas:</strong> quemas, uso inadecuado de productos químicos.</li>
+          </ul>
+        </section>
+
+        <section class="card" style="margin-top:14px">
+          <div class="section-title">
+            <h2>Tipos de contaminación</h2>
+            <span class="muted small">Breve</span>
+          </div>
+          <div class="facts">
+            <div class="fact"><strong>Aire</strong><span class="small muted">Partículas, CO₂, NOₓ</span></div>
+            <div class="fact"><strong>Agua</strong><span class="small muted">Vertidos, microplásticos</span></div>
+            <div class="fact"><strong>Suelo</strong><span class="small muted">Metales pesados, pesticidas</span></div>
+            <div class="fact"><strong>Ruido</strong><span class="small muted">Tráfico, industrias</span></div>
+          </div>
+        </section>
+
+        <section class="card" style="margin-top:14px">
+          <div class="section-title">
+            <h2>Efectos en las personas y la naturaleza</h2>
+            <span class="muted small">Salud y ecosistemas</span>
+          </div>
+          <ul>
+            <li><strong>Salud:</strong> enfermedades respiratorias, alergias, intoxicaciones.</li>
+            <li><strong>Ambiente:</strong> pérdida de biodiversidad, acidificación de suelos y aguas.</li>
+            <li><strong>Economía:</strong> pérdida de cultivos, costos sanitarios y daños a infraestructuras.</li>
+          </ul>
+        </section>
+
+        <section class="card tips" style="margin-top:14px">
+          <div class="section-title">
+            <h2>Soluciones y acciones que puedes hacer</h2>
+            <span class="muted small">A tu alcance</span>
+          </div>
+          <ul>
+            <li>Usa transporte público, comparte el coche o camina cuando sea posible.</li>
+            <li>Recicla y separa la basura en casa; reduce el uso de plásticos de un solo uso.</li>
+            <li>Apoya productos locales y prácticas agrícolas sostenibles.</li>
+            <li>Ahorra energía: apaga luces y dispositivos cuando no los uses.</li>
+            <li>Participa en jornadas de limpieza o en proyectos ambientales escolares o comunitarios.</li>
+          </ul>
+        </section>
+
+        <section class="card" style="margin-top:14px">
+          <div class="section-title">
+            <h2>Mini cuestionario (rápido)</h2>
+            <span class="muted small">Comprueba lo que aprendiste</span>
+          </div>
+          <div class="quiz small">
+            <p>1. ¿Cuál de estas no es una forma de contaminación?</p>
+            <label><input type="radio" name="q1" value="a"> Residuos plásticos</label><br>
+            <label><input type="radio" name="q1" value="b"> Contaminación lumínica</label><br>
+            <label><input type="radio" name="q1" value="c"> Fotosíntesis</label>
+
+            <p style="margin-top:8px">2. Una acción para reducir la contaminación del aire es:</p>
+            <label><input type="radio" name="q2" value="a"> Usar transporte público</label><br>
+            <label><input type="radio" name="q2" value="b"> Tirar basura al río</label><br>
+            <label><input type="radio" name="q2" value="c"> Quemar residuos</label>
+
+            <div style="margin-top:10px;display:flex;gap:8px">
+              <button class="btn" id="checkQuiz">Revisar respuestas</button>
+              <div id="quizResult" class="muted small" style="align-self:center"></div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <aside>
+        <div class="card">
+          <h3 style="margin-top:0">Datos rápidos</h3>
+          <p class="small muted">Pequeños datos que impresionan:</p>
+          <ul class="small">
+            <li>Millones de personas respiran aire con niveles peligrosos de contaminación.</li>
+            <li>Los plásticos pueden tardar cientos de años en degradarse.</li>
+            <li>Reducir el uso del coche algunas veces a la semana mejora la calidad del aire local.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin-top:0">Recursos</h3>
+          <p class="small muted">Busca en tu escuela o biblioteca más información sobre:</p>
+          <ul class="small">
+            <li>Programas de reciclaje locales</li>
+            <li>Proyectos de energía renovable</li>
+            <li>Organizaciones ambientales juveniles</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 style="margin-top:0">Consejo rápido</h3>
+          <p class="small">Empieza con un hábito: lleva tu propia bolsa o botella reutilizable durante una semana y mira cuánto reduces la basura.</p>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      <p>Creado para aprender sobre contaminación. Puedes editar este archivo, copiarlo o usarlo en un proyecto escolar.</p>
+    </footer>
+  </div>
+
+  <script>
+    // Tema
+    const toggle = document.getElementById('toggleTheme');
+    toggle.addEventListener('click', ()=>{
+      document.documentElement.classList.toggle('dark');
+      toggle.textContent = document.documentElement.classList.contains('dark') ? 'Modo claro' : 'Modo oscuro';
+    });
+
+    // Quiz
+    document.getElementById('checkQuiz').addEventListener('click', ()=>{
+      const a = document.querySelector('input[name=q1]:checked')?.value;
+      const b = document.querySelector('input[name=q2]:checked')?.value;
+      let score = 0;
+      if(a === 'c') score++;
+      if(b === 'a') score++;
+      const r = document.getElementById('quizResult');
+      r.textContent = `Respuestas correctas: ${score} / 2`;
+    });
+
+    // Descargar HTML
+    document.getElementById('download').addEventListener('click', ()=>{
+      const html = '<!doctype html>' + document.documentElement.outerHTML;
+      const blob = new Blob([html],{type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'contaminacion.html'; document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+<a href="INFOr.html" class="btn-regresar">Regresar</a>
+</body>
+</html> 

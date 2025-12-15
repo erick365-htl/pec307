@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sopa de Letras: Reciclaje ♻️</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to bottom right, #a8e6cf, #dcedc1);
+      color: #2e7d32;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #1b5e20;
+      text-shadow: 1px 1px 2px #81c784;
+    }
+
+    #grid {
+      display: grid;
+      grid-template-columns: repeat(12, 30px);
+      justify-content: center;
+      gap: 3px;
+      margin: 20px auto;
+      user-select: none;
+    }
+
+    .cell {
+      width: 30px;
+      height: 30px;
+      background-color: #f1f8e9;
+      border: 1px solid #81c784;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      color: #2e7d32;
+      transition: 0.3s;
+    }
+
+    .cell.selected {
+      background-color: #aed581;
+      color: white;
+    }
+
+    .cell.found {
+      background-color: #43a047;
+      color: white;
+    }
+
+    #word-list {
+      margin-top: 20px;
+      display: inline-block;
+      text-align: left;
+      background: #e8f5e9;
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 8px #81c784;
+    }
+
+    #word-list li.found {
+      text-decoration: line-through;
+      color: #43a047;
+    }
+  </style>
+</head>
+<body>
+  <h1>♻️ Sopa de Letras: Reciclaje ♻️</h1>
+  <p>Busca las siguientes palabras relacionadas con el reciclaje:</p>
+
+  <ul id="word-list">
+    <li>PAPEL</li>
+    <li>VIDRIO</li>
+    <li>PLASTICO</li>
+    <li>REUSAR</li>
+    <li>REDUCIR</li>
+    <li>NATURALEZA</li>
+    <li>AGUA</li>
+  </ul>
+
+  <div id="grid"></div>
+
+  <script>
+    const palabras = ["PAPEL", "VIDRIO", "PLASTICO", "REUSAR", "REDUCIR", "NATURALEZA", "AGUA"];
+    const filas = 12;
+    const columnas = 12;
+    const grid = document.getElementById("grid");
+    const letras = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    // Crear la cuadrícula vacía
+    let matriz = Array.from({ length: filas }, () => Array(columnas).fill(""));
+
+    // Colocar palabras en posiciones aleatorias (horizontal o vertical)
+    function colocarPalabras() {
+      for (let palabra of palabras) {
+        let colocada = false;
+        while (!colocada) {
+          let dir = Math.random() > 0.5 ? "H" : "V";
+          let fila = Math.floor(Math.random() * filas);
+          let col = Math.floor(Math.random() * columnas);
+
+          if (dir === "H" && col + palabra.length <= columnas) {
+            let espacio = true;
+            for (let i = 0; i < palabra.length; i++) {
+              if (matriz[fila][col + i] !== "" && matriz[fila][col + i] !== palabra[i]) {
+                espacio = false;
+                break;
+              }
+            }
+            if (espacio) {
+              for (let i = 0; i < palabra.length; i++) matriz[fila][col + i] = palabra[i];
+              colocada = true;
+            }
+          } else if (dir === "V" && fila + palabra.length <= filas) {
+            let espacio = true;
+            for (let i = 0; i < palabra.length; i++) {
+              if (matriz[fila + i][col] !== "" && matriz[fila + i][col] !== palabra[i]) {
+                espacio = false;
+                break;
+              }
+            }
+            if (espacio) {
+              for (let i = 0; i < palabra.length; i++) matriz[fila + i][col] = palabra[i];
+              colocada = true;
+            }
+          }
+        }
+      }
+    }
+
+    // Llenar con letras aleatorias
+    function llenarVacios() {
+      for (let i = 0; i < filas; i++) {
+        for (let j = 0; j < columnas; j++) {
+          if (matriz[i][j] === "") matriz[i][j] = letras[Math.floor(Math.random() * letras.length)];
+        }
+      }
+    }
+
+    // Mostrar la sopa de letras
+    function mostrarMatriz() {
+      grid.innerHTML = "";
+      for (let i = 0; i < filas; i++) {
+        for (let j = 0; j < columnas; j++) {
+          const cell = document.createElement("div");
+          cell.classList.add("cell");
+          cell.textContent = matriz[i][j];
+          cell.dataset.fila = i;
+          cell.dataset.col = j;
+          grid.appendChild(cell);
+        }
+      }
+    }
+
+    colocarPalabras();
+    llenarVacios();
+    mostrarMatriz();
+
+    // Selección simple (sin validación compleja)
+    let seleccion = "";
+    const cells = document.querySelectorAll(".cell");
+
+    cells.forEach(c => {
+      c.addEventListener("click", () => {
+        if (c.classList.contains("found")) return;
+        c.classList.toggle("selected");
+        seleccion += c.textContent;
+
+        for (let palabra of palabras) {
+          if (seleccion.includes(palabra)) {
+            document.querySelectorAll(".cell.selected").forEach(s => {
+              s.classList.add("found");
+              s.classList.remove("selected");
+            });
+            const li = Array.from(document.querySelectorAll("#word-list li"))
+                            .find(l => l.textContent === palabra);
+            if (li) li.classList.add("found");
+            seleccion = "";
+          }
+        }
+
+        // Limpiar selección si ya se seleccionaron más de 10 letras sin éxito
+        if (seleccion.length > 10) {
+          document.querySelectorAll(".cell.selected").forEach(s => s.classList.remove("selected"));
+          seleccion = "";
+        }
+      });
+    });
+
+    
+  </script>
+  <a href="INDICE.html" class="btn-regresar">Regresar</a>
+</body>
+</html> 

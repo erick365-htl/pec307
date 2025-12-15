@@ -1,0 +1,110 @@
+ <!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Buzón</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #337933b0;
+      margin: 0;
+    }
+
+    .menu-container {
+      background-color: #fffffff5;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+    }
+
+    h1 {
+      color: #802a14;
+      margin-bottom: 15px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    p {
+      color: #444;
+      margin-bottom: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .submit-btn {
+      background-color: #337933;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .submit-btn:hover {
+      background-color: #285f28;
+    }
+  </style>
+</head>
+<body>
+  <div class="menu-container">
+    <h1>Quejas y sugerencias</h1>
+    <h2>¿Tienes una idea o problema? ¡Queremos escucharlo!</h2>
+    <p>Hola! En ECO TEC, valoramos mucho su opinión.</p>
+    <p>Si tienes una sugerencia que creas que podría mejorar las cosas, o si has tenido una experiencia negativa que necesita nuestra atención, por favor háznoslo saber aquí.</p>
+    <p>Tu comentario nos ayuda directamente a ser mejores. ¡Gracias por tomarte el tiempo para escribir!</p>
+
+    <div class="form-group">
+      <label for="tipo">Tipo de comentario:</label>
+      <select id="tipo" name="tipo" required>
+        <option disabled selected>Selecciona una opción</option>
+        <option value="queja">Queja</option>
+        <option value="sugerencia">Sugerencia</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="mensaje">Detalles de Queja/Sugerencia:</label>
+      <textarea id="mensaje" name="mensaje" rows="6" required placeholder="Describe tu comentario de forma clara y detallada..."></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Enviar Comentario</button>
+  </div>
+  <a href="gene.html" class="btn-regresar">Regresar</a>
+</body>
+</html>
+
+ 
